@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block page_content %}
+
+<div class="container">
+    <div class="col-style">
+        <div class="col text-center text-light mt-5 p-5 bg-primary rounded">
+            {% if user.is_authenticated %}
+                <h1>Welcome back {{ user.username|default:'Guest' }}!</h1>
+                <a href="{% url 'user_accounts' request.user.id %}">Your Accounts</a>
+            {% else %}
+                <h1>Hello!</h1>
+                <h2>Sign up or sign in to view your Expense Tracker accounts.</h2>
+            {% endif %}
+            
+        </div>
+    </div>
+
+</div>
+
+{% endblock page_content %}

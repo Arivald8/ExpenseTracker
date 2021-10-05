@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+
+<div class="login-wrapper">
+    <div class="container text-center text-light justify-content-center mt-5 p-5 bg-primary rounded">
+        <h2>Login</h2>
+    
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Login" class="btn-secondary">
+        </form>
+        
+        <hr>
+        <a href="{% url 'index' %}">Back to dashboard</a>
+        <hr>
+        <a href="{% url 'register' %}">Register</a>
+    </div>
+</div>
+
+
+{% endblock page_content %}

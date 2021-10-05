@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block page_content %}
+
+    <h1>Transactions</h1>
+
+    <h3>{{account_name}}</h3>
+
+
+    <!-- ALERTS -->
+    {% if same_account_transfer_alert %}
+        <div class="alert alert-danger" role="alert">
+            You can't transfer funds between the same account!
+            Please select different accounts.
+        </div>
+    {% endif %}
+    {% if invalid_balance_alert %}
+        <div class="alert alert-danger" role="alert">
+            "From" account does not have enough funds!
+        </div>
+    {% endif %}
+    <!-- END ALERTS -->
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav navbar-left">
+                <li>
+                    <div class="btn_nav"><a class="btn btn-primary btn-small navbar-btn" href="{% url 'user_accounts' request.user.id %}">Back to Accounts</a>
+                    </div>
+
+                
+
+                </li>
+            </ul>
+            </div>
+
+            <div class="navbar-collapse collapse w-10 order-2 dual-collapse2">
+                <ul class="navbar-nav ml-auto">
+
+                <!-- New Transaction Modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-transaction-modal-lg">New Transaction</button>
+
+                    <div class="modal fade bd-transaction-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">New Transaction</h5>
+                                </div>
+                                <div class="modal-body">
+
+                                    <!-- NESTED MODALS -->
+                                    <div class="modal-separator">
+                                        <!-- Debit Modal -->
+                                        <button type="button" class="btn btn-primary float-left" data-toggle="modal" data-target=".bd-debit-modal-lg">Add Debit</button>
+
+                                        <div class="modal fade bd-debit-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">Debit Transaction</h5>
+                                                    </div>
+                                                    
+                                                    <div class="modal-body">
+                                                    
+                                                        <form action="" method="POST">
+                                                            {% csrf_token %}
+                                                            <div class="form-row">
+                                                                <div class="col">
+                                                                    {{ debit_form.debit_name|as_crispy_field }}
+                                                                </div>
+                                                                <div class="col">
+                                                                    {{ debit_form.debit_value|as_crispy_field }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </form>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Debit Modal END -->
+                                    
+                                        <!-- Credit Modal -->
+                                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target=".bd-credit-modal-lg">Add Credit</button>
+
+                                        <div class="modal fade bd-credit-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLongTitle">Credit Transaction</h5>
+                                                    </div>
+                                                    
+                                                    <div class="modal-body">
+                                                    
+                                                        <form action="" method="POST">
+                                                            {% csrf_token %}
+                                                            <div class="form-row">
+                                                                <div class="col">
+                                                                    {{ credit_form.credit_name|as_crispy_field }}
+                                                                </div>
+                                                                <div class="col">
+                                                                    {{ credit_form.credit_value|as_crispy_field }}
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </form>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Credit Modal END -->
+                                    <!-- NESTED END -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal END -->
+
+                    <!-- Fund transfer Modal -->
+
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-transfer-modal-lg">Transfer Funds</button>
+
+                    <div class="modal fade bd-transfer-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Transfer funds between your accounts</h5>
+                                </div>
+                                <div class="modal-body">
+
+                                    <form action="" method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-row">
+                                            <div class="col">
+                                                {{ transfer_form.from_account|as_crispy_field }}
+                                                {{ transfer_form.to_account|as_crispy_field }}
+                                                {{ transfer_form.funds|as_crispy_field }}
+                                            </div>
+                                        </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal END -->
+        
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <hr>
+
+    <!-- Transactions table -->
+    <div class="table_wrapper">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Description</th>
+                <th scope="col">Debit</th>
+                <th scope="col">Credit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in transaction_data %}
+                <tr>
+                <th scope="row">{{data.AT_date}}</th>
+                <td>{{data.AT_description}}</td>
+                <td>{{data.AT_debit}}</td>
+                <td>{{data.AT_credit}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="float-right">
+
+        <button><i class='fas fa-angle-left' style='font-size:24px'></i></button>
+        <a href="{% url 'specific_uma_transaction_buffer' transaction_data.0.id 10 %}"><i class='fas fa-angle-right' style='font-size:24px'></i></a>
+
+        <div class="d-inline p-2 bg-dark text-white float-right"><h4>Account Balance: {{account_balance}}</h4></div>
+    </div>
+    <hr>
+
+
+{% endblock page_content %}

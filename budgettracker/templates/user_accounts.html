@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block page_content %}
+
+    <div class="TopBarWrapper">
+        <h1>Your Accounts</h1>
+        <div class="ModalsWrapper">
+            <!-- New Account Modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">New Account</button>
+
+            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Create a new account</h5>
+                        </div>
+                        <div class="modal-body">
+
+                            {% load crispy_forms_tags %}
+
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="col">
+                                        {{ uma_form.UMA_form_name|as_crispy_field }}
+                                    </div>
+                                    <div class="col">
+                                        {{ uma_form.UMA_form_type|as_crispy_field }}
+                                    </div>
+                                    <div class="col">
+                                        {{ uma_form.UMA_form_balance|as_crispy_field }}
+                                    </div>
+                                </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Create</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal END -->
+            
+            <!-- Delete Account Modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-delete_me-modal-lg">Delete Account</button>
+
+            <div class="modal fade bd-delete_me-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Delete one of your accounts</h5>
+                        </div>
+                        <div class="modal-body">
+
+                            <form action="" method="POST">
+                                {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="col">
+                                        {{ uda_form.UDA_name|as_crispy_field }}
+                                    </div>
+                                </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <a href="{% url 'delete_all_accounts' request.user.id %}"><button type="button" class="btn btn-primary">Delete All</button></a>
+                                    <button type="submit" class="btn btn-primary">Delete</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal END -->
+        </div>
+    </div>
+        
+    <hr>
+    <!-- Accounts table -->
+    <div class="table_wrapper">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Account Name</th>
+                <th scope="col">Account Type</th>
+                <th scope="col">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in user_data %}
+                <tr>
+                <th scope="row">{{data.id}}</th>
+                <td><a href="{% url 'specific_uma' data.id %}">{{data.UMA_name}}</a></td>
+                <td>{{data.UMA_type}}</td>
+                <td>£{{data.UMA_balance}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock page_content %}

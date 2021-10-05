@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+
+<p>You have been successfully logged out!
+
+<hr>
+<a href="{% url 'login' %}">Back to login</a>
+<hr>
+<a href="{% url 'index' %}">Back to Home</a>
+{% endblock page_content %}

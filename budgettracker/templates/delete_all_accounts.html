@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+
+<p>All of your accounts have been deleted!</p>
+
+<hr>
+<a href="{% url 'user_accounts' request.user.id %}">Back to your accounts</a>
+<hr>
+<a href="{% url 'index' %}">Back to Home</a>
+{% endblock page_content %}

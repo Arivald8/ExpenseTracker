@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block page_content %}
+
+<div class="container text-center text-light justify-content-center mt-5 p-5 bg-primary rounded">
+    <h2 class="row text-center justify-content-center mb-5">Register</h2>
+
+    <div class="row text-center justify-content-center m-5 p-5">
+        <form class="d-flex flex-column" method="post">
+            {% csrf_token %}
+
+            {{form}}
+            <input type="submit" value="Register">
+        </form>
+    </div>
+
+    
+    <a clas="row text-center justify-content-center" href="{% url 'login' %}">Back to login</a>
+</div>
+
+{% endblock page_content %}
